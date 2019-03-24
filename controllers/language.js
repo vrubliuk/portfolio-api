@@ -6,42 +6,20 @@ exports.postLanguage = async (req, res, next) => {
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed")
     error.statusCode = 422;
-    throw error;
+    next(error)
   }
-
   const { name, level, priority } = req.body;
-
   const language = new Language({
     name,
     level,
     priority
   });
-  // language.save().then(result => {
-  //   res.status(201).json({
-  //     result
-  //   });
-  // }).catch(error => {
-  //   next(error)
-  // })
-  
   try {
     const result = await language.save()
     res.status(201).json({
       result
     });
- 
-  } catch (err) {
-    next(err)
+  } catch (error) {
+    next(error)
   }
-
-  // try {
-  //   const result = await language.save();
-  //   res.status(201).json({
-  //     result
-  //   });
-  // } catch (error) {
-  //   next(error)
-    
-  // }
-
 };

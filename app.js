@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 app.use(personRoutes);
 app.use(languageRoutes);
 
-app.use((error, req, res, next) => {
+app.use((error, req, res, next) => {  
   const status = error.statusCode || 500;
   const message = error.message;
   console.log("111", message);
@@ -38,5 +38,7 @@ app.use((error, req, res, next) => {
       { useNewUrlParser: true }
     );
     app.listen(8080);
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 })();
