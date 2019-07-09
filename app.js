@@ -1,13 +1,11 @@
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const personRoutes = require("./routes/person");
 const languageRoutes = require("./routes/language");
 
 const app = express();
-// app.use(bodyParser.urlencoded())
-app.use(bodyParser.json());
+app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use((req, res, next) => {
