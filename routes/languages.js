@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator/check");
-const languageController = require("../controllers/language");
+const languagesController = require("../controllers/languages");
 
 router.post(
   "/language",
@@ -10,7 +10,7 @@ router.post(
     body("level").isAlpha(),
     body("priority").isNumeric()
   ],
-  languageController.postLanguage
+  languagesController.postLanguage
 );
 
 module.exports = router;
