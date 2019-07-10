@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const useRoutes = require("./routes/index");
+const useRoutes = require("./routes");
 
 const app = express();
 app.use("/images", express.static(path.join(__dirname, "images")));

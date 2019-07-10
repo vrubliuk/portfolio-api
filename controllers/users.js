@@ -1,5 +1,7 @@
-exports.getPerson = (req, res, next) => {
+exports.getUser = (req, res, next) => {
+  
+  
   res.status(200).json({
-    data: "ololo"
+    data: req.params
   })
 }

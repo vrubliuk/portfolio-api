@@ -21,7 +21,11 @@ module.exports = app => {
   app.use("/api/users", users);
 
   app.use("/api/languages", languages);
-  
+
+  app.use((req, res) => {
+    res.status(404).send("<h1>Page not found</h1>");
+  });
+
   app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
     const message = error.message;
