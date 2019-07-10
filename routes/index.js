@@ -1,6 +1,7 @@
 const express = require("express");
 const users = require("./users");
 const languages = require("./languages");
+const { getNotFound } = require("../controllers/errors");
 
 module.exports = app => {
   app.use(express.json());
@@ -22,9 +23,7 @@ module.exports = app => {
 
   app.use("/api/languages", languages);
 
-  app.use((req, res) => {
-    res.status(404).send("<h1>Page not found</h1>");
-  });
+  app.use(getNotFound);
 
   app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
