@@ -49,7 +49,10 @@ const userSchema = new Schema({
   // skillIds: [ObjectId],
   // experienceIds: [ObjectId],
   // educationIds: [ObjectId],
-  // languageIds: [ObjectId],
+  // languageIds: [{
+  //   type: ObjectId,
+  //   ref: "Language"
+  // }],
   // projectIds: [ObjectId],
   resume: {
     type: String,

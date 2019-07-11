@@ -1,12 +1,17 @@
 const User = require("../models/user");
+const Language = require("../models/language");
 
 const userSelection = "-login -password -__v";
+const languageSelection = "-userId -__v";
 
 exports.getUser = async (req, res, next) => {
   let { id } = req.params;
   try {
-    const user = await User.findOne(id === "me" ? { login: "val" } : { _id: id }).select(userSelection);
-    res.json(user);
+    const data = await Promise.all([User.findById(id).select(userSelection), Language.find({ userId: id }).select(languageSelection)]);
+    res.json({
+      user: data[0],
+      languages: data[1]
+    });
   } catch (error) {
     next(error);
   }
@@ -43,7 +48,7 @@ exports.putUser = async (req, res, next) => {
         ...(email ? { email } : {}),
         ...(github ? { github } : {}),
         ...(linkedIn ? { linkedIn } : {}),
-        ...(resume ? { resume } : {}),
+        ...(resume ? { resume } : {})
       },
       {
         new: true,

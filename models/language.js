@@ -1,4 +1,5 @@
 const {Schema, model} = require("mongoose");
+const {ObjectId} = Schema.Types;
 
 const languageSchema = new Schema({
   name: {
@@ -13,7 +14,10 @@ const languageSchema = new Schema({
     type: Number,
     required: true
   },
-
+  userId: {
+    type: ObjectId,
+    ref: "User"
+  }
 });
 
 module.exports = model("Language", languageSchema)
