@@ -7,14 +7,14 @@ const app = express();
 app.use("/images", express.static(path.join(__dirname, "images")));
 useRoutes(app);
 
-(async () => {
-  try {
-    await mongoose.connect(
-      "mongodb+srv://val:lFyywe3NhqVWEYo5@portfolio-jumvs.mongodb.net/portfolio?retryWrites=true",
-      { useNewUrlParser: true }
-    );
+mongoose
+  .connect(
+    "mongodb+srv://val:lFyywe3NhqVWEYo5@portfolio-jumvs.mongodb.net/portfolio?retryWrites=true",
+    { useNewUrlParser: true }
+  )
+  .then(() => {
     app.listen(8080);
-  } catch (error) {
+  })
+  .catch(error => {
     console.log(error);
-  }
-})();
+  });
