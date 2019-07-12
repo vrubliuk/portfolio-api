@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { body } = require("express-validator/check");
-const { postLanguage, deleteLanguage } = require("../controllers/languages");
+// const { body } = require("express-validator/check");
+const { postLanguage, putLanguage, deleteLanguage } = require("../controllers/languages");
 
-router.post("/", [body("name").isAlpha(), body("level").isAlpha(), body("priority").isNumeric()], postLanguage);
+router.post("/", postLanguage);
+
+router.put("/:id", putLanguage);
 
 router.delete("/:id", deleteLanguage);
 

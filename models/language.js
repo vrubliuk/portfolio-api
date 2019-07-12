@@ -3,12 +3,10 @@ const {ObjectId} = Schema.Types;
 
 const languageSchema = new Schema({
   name: {
-    type: String,
-    required: true
+    type: String
   },
   level: {
-    type: String,
-    required: true
+    type: String
   },
   priority: {
     type: Number,
@@ -16,7 +14,8 @@ const languageSchema = new Schema({
   },
   userId: {
     type: ObjectId,
-    ref: "User"
+    ref: "User",
+    required: true
   }
 });
 
