@@ -1,9 +1,9 @@
 const {Schema, model} = require("mongoose");
 const {ObjectId} = Schema.Types;
 
-const languageSchema = new Schema({
-  name: String,
-  level: String,
+const skillSchema = new Schema({
+  title: String,
+  technologies: [String],
   priority: {
     type: Number,
     required: true
@@ -15,4 +15,4 @@ const languageSchema = new Schema({
   }
 });
 
-module.exports = model("Language", languageSchema)
+module.exports = model("Skill", skillSchema)

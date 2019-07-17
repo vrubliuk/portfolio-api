@@ -1,5 +1,8 @@
 const express = require("express");
 const users = require("./users");
+const skills = require("./skills");
+const experiences = require("./experiences");
+const educations = require("./educations");
 const languages = require("./languages");
 const { getNotFound } = require("../controllers/errors");
 
@@ -21,6 +24,12 @@ module.exports = app => {
 
   app.use("/api/users", users);
 
+  app.use("/api/skills", skills);
+  
+  app.use("/api/experiences", experiences);
+  
+  app.use("/api/educations", educations);
+  
   app.use("/api/languages", languages);
 
   app.use(getNotFound);
