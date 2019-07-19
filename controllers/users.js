@@ -51,8 +51,7 @@ exports.postUser = async (req, res, next) => {
 
 exports.putUser = async (req, res, next) => {
   const { id } = req.params;
-
-  const { name, surname, qualification, avatar, location, phone, email, github, linkedIn, resume } = req.body;
+  const { name, surname, qualification, avatar, location, phone, email, github, linkedIn } = req.body;
   try {
     const user = await User.findByIdAndUpdate(
       id,
@@ -66,7 +65,6 @@ exports.putUser = async (req, res, next) => {
         ...(email ? { email } : {}),
         ...(github ? { github } : {}),
         ...(linkedIn ? { linkedIn } : {}),
-        ...(resume ? { resume } : {})
       },
       {
         new: true,
