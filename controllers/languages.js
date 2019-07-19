@@ -1,14 +1,7 @@
 // const { validationResult } = require("express-validator/check");
 const Language = require("../models/language");
-const languageSelection = "-userId -__v";
 
 exports.postLanguage = async (req, res, next) => {
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   const error = new Error("Validation failed");
-  //   error.statusCode = 422;
-  //   next(error);
-  // }
   const { name, level, priority } = req.body;
   const language = new Language({
     name,
@@ -44,7 +37,7 @@ exports.putLanguage = async (req, res, next) => {
         new: true,
         useFindAndModify: false
       }
-    ).select(languageSelection);
+    ).select("-userId -__v");
     res.json(language);
   } catch (error) {
     next(error);

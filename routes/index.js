@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("./auth");
 const users = require("./users");
 const skills = require("./skills");
 const experiences = require("./experiences");
@@ -11,25 +12,21 @@ module.exports = app => {
 
   app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, PATCH, DELETE"
-    );
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
-    );
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
   });
+
+  app.use("/api/auth", auth);
 
   app.use("/api/users", users);
 
   app.use("/api/skills", skills);
-  
+
   app.use("/api/experiences", experiences);
-  
+
   app.use("/api/educations", educations);
-  
+
   app.use("/api/languages", languages);
 
   app.use(getNotFound);
@@ -37,7 +34,6 @@ module.exports = app => {
   app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
     const message = error.message;
-    console.log("111", message);
     res.status(status).json({ message });
   });
 };
