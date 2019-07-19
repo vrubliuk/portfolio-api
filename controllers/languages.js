@@ -29,9 +29,9 @@ exports.putLanguage = async (req, res, next) => {
     const language = await Language.findByIdAndUpdate(
       id,
       {
-        ...(name ? { name } : {}),
-        ...(level ? { level } : {}),
-        ...(priority ? { priority } : {})
+        ...(name !== undefined ? { name } : {}),
+        ...(level !== undefined ? { level } : {}),
+        ...(priority !== undefined ? { priority } : {})
       },
       {
         new: true,

@@ -34,12 +34,12 @@ exports.putExperience = async (req, res, next) => {
     const experience = await Experience.findByIdAndUpdate(
       id,
       {
-        ...(position ? { position } : {}),
-        ...(company ? { company } : {}),
-        ...(city ? { city } : {}),
-        ...(startDate ? { startDate } : {}),
-        ...(endDate ? { endDate } : {}),
-        ...(priority ? { priority } : {})
+        ...(position !== undefined ? { position } : {}),
+        ...(company !== undefined ? { company } : {}),
+        ...(city !== undefined ? { city } : {}),
+        ...(startDate !== undefined ? { startDate } : {}),
+        ...(endDate !== undefined ? { endDate } : {}),
+        ...(priority !== undefined ? { priority } : {})
       },
       {
         new: true,

@@ -32,11 +32,11 @@ exports.putEducation = async (req, res, next) => {
     const education = await Education.findByIdAndUpdate(
       id,
       {
-        ...(speciality ? { speciality } : {}),
-        ...(institution ? { institution } : {}),
-        ...(startDate ? { startDate } : {}),
-        ...(endDate ? { endDate } : {}),
-        ...(priority ? { priority } : {})
+        ...(speciality !== undefined ? { speciality } : {}),
+        ...(institution !== undefined ? { institution } : {}),
+        ...(startDate !== undefined ? { startDate } : {}),
+        ...(endDate !== undefined ? { endDate } : {}),
+        ...(priority !== undefined ? { priority } : {})
       },
       {
         new: true,

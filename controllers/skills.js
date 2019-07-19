@@ -28,9 +28,9 @@ exports.putSkill = async (req, res, next) => {
     const skill = await Skill.findByIdAndUpdate(
       id,
       {
-        ...(title ? { title } : {}),
-        ...(technologies ? { technologies } : {}),
-        ...(priority ? { priority } : {})
+        ...(title !== undefined ? { title } : {}),
+        ...(technologies !== undefined ? { technologies } : {}),
+        ...(priority !== undefined ? { priority } : {})
       },
       {
         new: true,
