@@ -51,7 +51,30 @@ exports.postUser = async (req, res, next) => {
 
 exports.putUser = async (req, res, next) => {
   const { id } = req.params;
-  const { name, surname, qualification, avatar, location, phone, email, github, linkedIn } = req.body;
+  let { name, surname, qualification, avatar, location, phone, email, github, linkedIn, resume } = req.body;
+
+  const avatarFiles = req.files.avatar;
+  if (avatarFiles) {
+    const avatarFile = avatarFiles[0]
+    if (avatarFile.mimetype !== "image/jpeg" && avatarFile.mimetype !== "image/jpg" && avatarFile.mimetype !== "image/png") {
+      next(new Error("File type is not correct"));
+    }
+    avatar = `http://localhost:8080/${avatarFile.path}`;
+  } else if (avatar === "") {
+    console.log("deletion");
+  }
+
+  const resumeFiles = req.files.resume;
+  if (resumeFiles) {
+    const resumeFile = resumeFiles[0]
+    if (resumeFile.mimetype !== "application/pdf") {  
+      next(new Error("File type is not correct"));
+    } 
+    resume = resumeFile.path;
+  } else if (resume === "") {
+    console.log("deletion");
+  }
+
   try {
     const user = await User.findByIdAndUpdate(
       id,
@@ -65,6 +88,7 @@ exports.putUser = async (req, res, next) => {
         ...(email !== undefined ? { email } : {}),
         ...(github !== undefined ? { github } : {}),
         ...(linkedIn !== undefined ? { linkedIn } : {}),
+        ...(resume !== undefined ? { resume } : {})
       },
       {
         new: true,

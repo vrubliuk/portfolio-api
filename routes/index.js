@@ -1,5 +1,4 @@
 const express = require("express");
-const multer = require("multer");
 const auth = require("./auth");
 const users = require("./users");
 const skills = require("./skills");
@@ -10,22 +9,6 @@ const { getNotFound } = require("../controllers/errors");
 
 module.exports = app => {
   app.use(express.json());
-
-  app.use(
-    multer({
-      storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-          cb(null, "uploads");
-        },
-        filename: (req, file, cb) => {
-          cb(null, `${Date.now()}-${file.originalname}`);
-        }
-      }),
-      fileFilter: (req, file, cb) => {
-        cb(null, file.mimetype === 'application/pdf')
-      }
-    }).single("resume")
-  );
 
   app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");

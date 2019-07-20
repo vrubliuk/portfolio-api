@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const useRoutes = require("./routes");
 
 const app = express();
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 useRoutes(app);
 
 mongoose.set('useCreateIndex', true);
