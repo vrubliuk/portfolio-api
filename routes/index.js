@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors")
 const auth = require("./auth");
 const users = require("./users");
 const skills = require("./skills");
@@ -9,13 +10,15 @@ const { getNotFound } = require("../controllers/errors");
 
 module.exports = app => {
   app.use(express.json());
+  
+  app.use(cors());
 
-  app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
-  });
+  // app.use((req, res, next) => {
+  //   res.setHeader("Access-Control-Allow-Origin", "*");
+  //   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+  //   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  //   next();
+  // });
 
   app.use("/api/auth", auth);
 
