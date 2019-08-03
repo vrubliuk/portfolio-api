@@ -12,7 +12,7 @@ mongoose.set("useCreateIndex", true);
 mongoose
   .connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@portfolio-jumvs.mongodb.net/portfolio?retryWrites=true`, { useNewUrlParser: true })
   .then(() => {
-    app.listen(8080);
+    app.listen(process.env.PORT);
   })
   .catch(error => {
     console.log(error);

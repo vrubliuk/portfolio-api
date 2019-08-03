@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator/check");
+require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const Skill = require("../models/skill");
@@ -18,6 +19,8 @@ exports.getUser = async (req, res, next) => {
     ]);
     res.json({
       ...data[0]._doc,
+      avatar: `${process.env.URL}/${data[0]._doc.avatar}`,
+      resume: `${process.env.URL}/${data[0]._doc.resume}`,
       skills: data[1],
       experiences: data[2],
       educations: data[3],
@@ -59,7 +62,7 @@ exports.putUser = async (req, res, next) => {
     if (avatarFile.mimetype !== "image/jpeg" && avatarFile.mimetype !== "image/jpg" && avatarFile.mimetype !== "image/png") {
       next(new Error("File type is not correct"));
     }
-    avatar = `http://localhost:8080/${avatarFile.path}`;
+    avatar = avatarFile.path;  
   } else if (avatar === "") {
     console.log("deletion");
   }
