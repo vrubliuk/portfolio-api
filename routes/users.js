@@ -6,6 +6,7 @@ const multer = require("multer");
 const { getUser, postUser, putUser } = require("../controllers/users");
 const User = require("../models/user");
 
+
 router.get("/:id", getUser);
 
 router.post(
@@ -31,20 +32,19 @@ router.put(
   multer({
     storage: multer.diskStorage({
       destination: (req, file, cb) => {
-        fs.readdir("uploads/images", (err, files) => {
-          if (err) throw new Error(err);
-          if (files.includes(req.params.id)) {
-            cb(null, `uploads/images/${req.params.id}/`);
-          } else {
-            fs.mkdir(`uploads/images/${req.params.id}/`, err => {
-              if (err) throw new Error(err);
-              cb(null, `uploads/images/${req.params.id}/`);
+        const filePath = `uploads/${req.params.id}/${file.fieldname}`;
+        fs.readdir(filePath, (err, files) => {
+          if (err) {
+            fs.mkdir(filePath, { recursive: true }, err => {
+              cb(null, filePath);
             });
+          } else {
+            cb(null, filePath);
           }
         });
       },
       filename: (req, file, cb) => {
-        cb(null,file.originalname);
+        cb(null, file.originalname);
       }
       // filename: (req, file, cb) => {
       //   cb(null, `${Date.now()}-${file.originalname}`);

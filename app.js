@@ -1,11 +1,9 @@
 const express = require("express");
-const path = require("path");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const useRoutes = require("./routes");
 
 const app = express();
-app.use("/uploads/images", express.static(path.join(__dirname, "uploads", "images")));
 useRoutes(app);
 
 mongoose.set("useCreateIndex", true);

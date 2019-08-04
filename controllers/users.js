@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { validationResult } = require("express-validator/check");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
@@ -6,6 +7,7 @@ const Skill = require("../models/skill");
 const Experience = require("../models/experience");
 const Education = require("../models/education");
 const Language = require("../models/language");
+const unselect = require("../helpers/unselect");
 
 exports.getUser = async (req, res, next) => {
   const { id } = req.params;
@@ -19,8 +21,8 @@ exports.getUser = async (req, res, next) => {
     ]);
     res.json({
       ...data[0]._doc,
-      avatar: `${process.env.URL}/${data[0]._doc.avatar}`,
-      resume: `${process.env.URL}/${data[0]._doc.resume}`,
+      avatar: data[0]._doc.avatar ? `${process.env.URL}/${data[0]._doc.avatar}` : "",
+      resume: data[0]._doc.resume ? `${process.env.URL}/${data[0]._doc.resume}` : "",
       skills: data[1],
       experiences: data[2],
       educations: data[3],
@@ -58,47 +60,60 @@ exports.putUser = async (req, res, next) => {
 
   const avatarFiles = req.files.avatar;
   if (avatarFiles) {
-    const avatarFile = avatarFiles[0]
+    const avatarFile = avatarFiles[0];
     if (avatarFile.mimetype !== "image/jpeg" && avatarFile.mimetype !== "image/jpg" && avatarFile.mimetype !== "image/png") {
-      next(new Error("File type is not correct"));
+      fs.unlink(avatarFile.path, err => {
+        if (err) return next(err);
+      });
+      return next(new Error("File type is not correct"));
     }
-    avatar = avatarFile.path;  
-  } else if (avatar === "") {
-    console.log("deletion");
+    avatar = avatarFile.path;
   }
 
   const resumeFiles = req.files.resume;
   if (resumeFiles) {
-    const resumeFile = resumeFiles[0]
-    if (resumeFile.mimetype !== "application/pdf") {  
-      next(new Error("File type is not correct"));
-    } 
+    const resumeFile = resumeFiles[0];
+    if (resumeFile.mimetype !== "application/pdf") {
+      fs.unlink(resumeFile.path, err => {
+        if (err) return next(err);
+      });
+      return next(new Error("File type is not correct"));
+    }
     resume = resumeFile.path;
-  } else if (resume === "") {
-    console.log("deletion");
   }
 
   try {
-    const user = await User.findByIdAndUpdate(
-      id,
-      {
-        ...(name !== undefined ? { name } : {}),
-        ...(surname !== undefined ? { surname } : {}),
-        ...(qualification !== undefined ? { qualification } : {}),
-        ...(avatar !== undefined ? { avatar } : {}),
-        ...(location !== undefined ? { location } : {}),
-        ...(phone !== undefined ? { phone } : {}),
-        ...(email !== undefined ? { email } : {}),
-        ...(github !== undefined ? { github } : {}),
-        ...(linkedIn !== undefined ? { linkedIn } : {}),
-        ...(resume !== undefined ? { resume } : {})
-      },
-      {
-        new: true,
-        useFindAndModify: false
+    const user = await User.findById(id);
+    if (name !== undefined) user.name = name;
+    if (surname !== undefined) user.surname = surname;
+    if (qualification !== undefined) user.qualification = qualification;
+    if (avatar !== undefined) {
+      if ((avatar !== user.avatar && user.avatar !== "") || (avatar === "" && user.avatar !== "")) {
+        fs.unlink(user.avatar, err => {
+          if (err) throw err;
+        });
       }
-    ).select("-login -password -__v");
-    res.json(user);
+      user.avatar = avatar;
+    }
+    if (location !== undefined) user.location = location;
+    if (phone !== undefined) user.phone = phone;
+    if (email !== undefined) user.email = email;
+    if (github !== undefined) user.github = github;
+    if (linkedIn !== undefined) user.linkedIn = linkedIn;
+    if (resume !== undefined) {
+      if ((resume !== user.resume && user.resume !== "") || (resume === "" && user.resume !== "")) {
+        fs.unlink(user.resume, err => {
+          if (err) throw err;
+        });
+      }
+      user.resume = resume;
+    }
+    const updatedUser = await user.save();
+    res.json({
+      ...unselect(updatedUser._doc, "login", "password", "__v"),
+      avatar: user.avatar ? `${process.env.URL}/${user.avatar}` : "",
+      resume: user.resume ? `${process.env.URL}/${user.resume}` : ""
+    });
   } catch (error) {
     next(error);
   }

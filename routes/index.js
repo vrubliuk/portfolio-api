@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("../helpers/path");
 const cors = require("cors")
 const auth = require("./auth");
 const users = require("./users");
@@ -9,10 +10,12 @@ const languages = require("./languages");
 const { getNotFound } = require("../controllers/errors");
 
 module.exports = app => {
+  app.use("/uploads", express.static(path("uploads")));
+  
   app.use(express.json());
   
   app.use(cors());
-
+  
   // app.use((req, res, next) => {
   //   res.setHeader("Access-Control-Allow-Origin", "*");
   //   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
