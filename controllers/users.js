@@ -7,6 +7,7 @@ const Skill = require("../models/skill");
 const Experience = require("../models/experience");
 const Education = require("../models/education");
 const Language = require("../models/language");
+const Project = require("../models/project");
 const unselect = require("../helpers/unselect");
 
 exports.getUser = async (req, res, next) => {
@@ -17,7 +18,8 @@ exports.getUser = async (req, res, next) => {
       Skill.find({ userId: id }).select("-userId -__v"),
       Experience.find({ userId: id }).select("-userId -__v"),
       Education.find({ userId: id }).select("-userId -__v"),
-      Language.find({ userId: id }).select("-userId -__v")
+      Language.find({ userId: id }).select("-userId -__v"),
+      Project.find({ userId: id }).select("-userId -__v")
     ]);
     res.json({
       ...data[0]._doc,
@@ -26,7 +28,11 @@ exports.getUser = async (req, res, next) => {
       skills: data[1],
       experiences: data[2],
       educations: data[3],
-      languages: data[4]
+      languages: data[4],
+      projects: data[5].map(project => ({ 
+        ...project._doc,
+        screenshot: project._doc.screenshot ? `${process.env.URL}/${project._doc.screenshot}` : ""
+      }))
     });
   } catch (error) {
     next(error);
