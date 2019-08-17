@@ -6,23 +6,22 @@ const multer = require("multer");
 const { getUser, postUser, putUser } = require("../controllers/users");
 const User = require("../models/user");
 
-
 router.get("/:id", getUser);
 
 router.post(
   "/",
   [
     body("login")
+      .trim()
       .custom(async login => {
         const user = await User.findOne({ login });
         if (user) throw new Error("This login is already in use.");
         return true;
-      })
-      // .withMessage("This login is already in use.")
-      .trim(),
+      }),
+    // .withMessage("This login is already in use.")
     body("password", "The password should be at least 6 characters long.")
-      .isLength({ min: 6 })
       .trim()
+      .isLength({ min: 6 })
   ],
   postUser
 );
