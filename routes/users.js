@@ -5,6 +5,7 @@ const { body } = require("express-validator/check");
 const multer = require("multer");
 const { getUser, postUser, putUser } = require("../controllers/users");
 const User = require("../models/user");
+const authMiddleware = require("../middleware/auth")
 
 router.get("/:id", getUser);
 
@@ -28,6 +29,7 @@ router.post(
 
 router.put(
   "/:id",
+  authMiddleware,
   multer({
     storage: multer.diskStorage({
       destination: (req, file, cb) => {
