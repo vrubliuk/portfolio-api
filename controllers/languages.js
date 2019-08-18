@@ -1,5 +1,5 @@
-// const { validationResult } = require("express-validator/check");
 const Language = require("../models/language");
+const unselect = require("../helpers/unselect");
 
 exports.postLanguage = async (req, res, next) => {
   const {userId} = req;
@@ -24,30 +24,28 @@ exports.postLanguage = async (req, res, next) => {
 };
 
 exports.putLanguage = async (req, res, next) => {
+  const { userId } = req;
   const { id } = req.params;
   const { name, level, priority } = req.body;
   try {
-    const language = await Language.findByIdAndUpdate(
-      id,
-      {
-        ...(name !== undefined ? { name } : {}),
-        ...(level !== undefined ? { level } : {}),
-        ...(priority !== undefined ? { priority } : {})
-      },
-      {
-        new: true,
-        useFindAndModify: false
-      }
-    ).select("-userId -__v");
-    res.json(language);
+    const language = await Language.findById(id);
+    if (language.userId.toString() !== userId) return res.status(403).json({ message: "Not authorized!" });
+    if (name !== undefined) language.name = name;
+    if (level !== undefined) language.level = level;
+    if (priority !== undefined) language.priority = priority;
+    const updatedLanguage = await language.save();
+    res.json(unselect(updatedLanguage._doc, "userId", "__v"));
   } catch (error) {
     next(error);
   }
 };
 
 exports.deleteLanguage = async (req, res, next) => {
+  const { userId } = req;
   const { id } = req.params;
   try {
+    const language = await Language.findById(id);
+    if (language.userId.toString() !== userId) return res.status(403).json({ message: "Not authorized!" });
     await Language.findByIdAndDelete(id);
     res.sendStatus(200);
   } catch (error) {

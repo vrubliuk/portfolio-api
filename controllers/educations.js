@@ -1,4 +1,5 @@
 const Education = require("../models/education");
+const unselect = require("../helpers/unselect");
 
 exports.postEducation = async (req, res, next) => {
   const {userId} = req;
@@ -27,32 +28,30 @@ exports.postEducation = async (req, res, next) => {
 };
 
 exports.putEducation = async (req, res, next) => {
+  const {userId} = req;
   const { id } = req.params;
   const { speciality, institution, startDate, endDate, priority } = req.body;
   try {
-    const education = await Education.findByIdAndUpdate(
-      id,
-      {
-        ...(speciality !== undefined ? { speciality } : {}),
-        ...(institution !== undefined ? { institution } : {}),
-        ...(startDate !== undefined ? { startDate } : {}),
-        ...(endDate !== undefined ? { endDate } : {}),
-        ...(priority !== undefined ? { priority } : {})
-      },
-      {
-        new: true,
-        useFindAndModify: false
-      }
-    ).select("-userId -__v");
-    res.json(education);
+    const education = await Education.findById(id);
+    if (education.userId.toString() !== userId) return res.status(403).json({ message: "Not authorized!" });
+    if (speciality !== undefined) education.speciality = speciality;
+    if (institution !== undefined) education.institution = institution;
+    if (startDate !== undefined) education.startDate = startDate;
+    if (endDate !== undefined) education.endDate = endDate;
+    if (priority !== undefined) education.priority = priority;
+    const updatedEducation = await education.save();
+    res.json(unselect(updatedEducation._doc, "userId", "__v"));
   } catch (error) {
     next(error);
   }
 };
 
 exports.deleteEducation = async (req, res, next) => {
+  const {userId} = req;
   const { id } = req.params;
   try {
+    const education = await Education.findById(id);
+    if (education.userId.toString() !== userId) return res.status(403).json({ message: "Not authorized!" });
     await Education.findByIdAndDelete(id);
     res.sendStatus(200);
   } catch (error) {

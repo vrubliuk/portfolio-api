@@ -1,4 +1,5 @@
 const Experience = require("../models/experience");
+const unselect = require("../helpers/unselect");
 
 exports.postExperience = async (req, res, next) => {
   const {userId} = req;
@@ -29,33 +30,31 @@ exports.postExperience = async (req, res, next) => {
 };
 
 exports.putExperience = async (req, res, next) => {
+  const {userId} = req;
   const { id } = req.params;
   const { position, company, city, startDate, endDate, priority } = req.body;
   try {
-    const experience = await Experience.findByIdAndUpdate(
-      id,
-      {
-        ...(position !== undefined ? { position } : {}),
-        ...(company !== undefined ? { company } : {}),
-        ...(city !== undefined ? { city } : {}),
-        ...(startDate !== undefined ? { startDate } : {}),
-        ...(endDate !== undefined ? { endDate } : {}),
-        ...(priority !== undefined ? { priority } : {})
-      },
-      {
-        new: true,
-        useFindAndModify: false
-      }
-    ).select("-userId -__v");
-    res.json(experience);
+    const experience = await Experience.findById(id)
+    if (experience.userId.toString() !== userId) return res.status(403).json({ message: "Not authorized!" });
+    if (position !== undefined) experience.position = position;
+    if (company !== undefined) experience.company = company;
+    if (city !== undefined) experience.city = city;
+    if (startDate !== undefined) experience.startDate = startDate;
+    if (endDate !== undefined) experience.endDate = endDate;
+    if (priority !== undefined) experience.priority = priority;
+    const updatedExperience = await experience.save();
+    res.json(unselect(updatedExperience._doc, "userId", "__v"));
   } catch (error) {
     next(error);
   }
 };
 
 exports.deleteExperience = async (req, res, next) => {
+  const { userId } = req;
   const { id } = req.params;
   try {
+    const experience = await Experience.findById(id);
+    if (experience.userId.toString() !== userId) return res.status(403).json({ message: "Not authorized!" });
     await Experience.findByIdAndDelete(id);
     res.sendStatus(200);
   } catch (error) {
