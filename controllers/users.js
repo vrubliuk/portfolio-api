@@ -29,7 +29,7 @@ exports.getUser = async (req, res, next) => {
       experiences: data[2],
       educations: data[3],
       languages: data[4],
-      projects: data[5].map(project => ({ 
+      projects: data[5].map(project => ({
         ...project._doc,
         screenshot: project._doc.screenshot ? `${process.env.URL}/${project._doc.screenshot}` : ""
       }))
@@ -61,9 +61,8 @@ exports.postUser = async (req, res, next) => {
 };
 
 exports.putUser = async (req, res, next) => {
-  const {userId} = req;
+  const { userId } = req;
   const { id } = req.params;
-  if (userId !== id) return res.status(403).json({message: "Not authorized!"})
   let { name, surname, qualification, avatar, location, phone, email, github, linkedIn, resume } = req.body;
 
   const avatarFiles = req.files.avatar;
@@ -92,6 +91,19 @@ exports.putUser = async (req, res, next) => {
 
   try {
     const user = await User.findById(id);
+    if (id !== userId) {
+      if (avatar) {
+        fs.unlink(avatar, err => {
+          if (err) console.log(err);
+        });
+      }
+      if (resume) {
+        fs.unlink(resume, err => {
+          if (err) console.log(err);
+        });
+      }
+      return res.status(403).json({ message: "Not authorized!" });
+    }
     if (name !== undefined) user.name = name;
     if (surname !== undefined) user.surname = surname;
     if (qualification !== undefined) user.qualification = qualification;
