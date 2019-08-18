@@ -1,6 +1,7 @@
 const Experience = require("../models/experience");
 
 exports.postExperience = async (req, res, next) => {
+  const {userId} = req;
   const { position, company, city, startDate, endDate, priority } = req.body;
   const experience = new Experience({
     position,
@@ -9,7 +10,7 @@ exports.postExperience = async (req, res, next) => {
     startDate,
     endDate,
     priority,
-    userId: "5d27092f6a96d823b45686ab"
+    userId
   });
   try {
     const { _id, position, company, city, startDate, endDate, priority } = await experience.save();

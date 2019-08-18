@@ -4,6 +4,7 @@ const Project = require("../models/project");
 const unselect = require("../helpers/unselect");
 
 exports.postProject = async (req, res, next) => {
+  const {userId} = req;
   const { name, screenshot, websiteUrl, repositoryUrl, summary, tags, priority } = req.body;
   const project = new Project({
     name,
@@ -13,7 +14,7 @@ exports.postProject = async (req, res, next) => {
     summary,
     tags,
     priority,
-    userId: "5d27092f6a96d823b45686ab"
+    userId
   });
   try {
     const savedProject = await project.save();

@@ -2,12 +2,13 @@
 const Language = require("../models/language");
 
 exports.postLanguage = async (req, res, next) => {
+  const {userId} = req;
   const { name, level, priority } = req.body;
   const language = new Language({
     name,
     level,
     priority,
-    userId: "5d27092f6a96d823b45686ab"
+    userId
   });
   try {
     const { _id, name, level, priority } = await language.save();

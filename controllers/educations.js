@@ -1,6 +1,7 @@
 const Education = require("../models/education");
 
 exports.postEducation = async (req, res, next) => {
+  const {userId} = req;
   const { speciality, institution, startDate, endDate, priority } = req.body;
   const education = new Education({
     speciality,
@@ -8,7 +9,7 @@ exports.postEducation = async (req, res, next) => {
     startDate,
     endDate,
     priority,
-    userId: "5d27092f6a96d823b45686ab"
+    userId
   });
   try {
     const { _id, speciality, institution, startDate, endDate, priority } = await education.save();

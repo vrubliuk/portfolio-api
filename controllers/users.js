@@ -61,7 +61,9 @@ exports.postUser = async (req, res, next) => {
 };
 
 exports.putUser = async (req, res, next) => {
+  const {userId} = req;
   const { id } = req.params;
+  if (userId !== id) return res.status(403).json({message: "Not authorized!"})
   let { name, surname, qualification, avatar, location, phone, email, github, linkedIn, resume } = req.body;
 
   const avatarFiles = req.files.avatar;
