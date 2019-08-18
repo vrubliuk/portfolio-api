@@ -44,7 +44,7 @@ exports.postUser = async (req, res, next) => {
   if (!errors.isEmpty()) {
     const error = new Error(errors.array()[0].msg);
     error.statusCode = 422;
-    next(error);
+    return next(error);
   }
   const { login, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
