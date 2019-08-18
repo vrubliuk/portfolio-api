@@ -3,12 +3,14 @@ const router = express.Router();
 const fs = require("fs");
 const multer = require("multer");
 const uniqid = require('uniqid');
+const authMiddleware = require("../middleware/auth");
 const { postProject, putProject, putProjectScreenshot, deleteProject, deleteProjectScreenshot } = require("../controllers/projects");
 
-router.post("/", postProject);
-router.put("/:id", putProject);
+router.post("/", authMiddleware, postProject);
+router.put("/:id", authMiddleware, putProject);
 router.put(
   "/:id/screenshot",
+  authMiddleware,
   multer({
     fileFilter: (req, file, cb) => {
       const typeIsCorrect = file.mimetype === "image/jpeg" || file.mimetype === "image/jpg" || file.mimetype === "image/png";
@@ -34,7 +36,7 @@ router.put(
   }).single("screenshot"),
   putProjectScreenshot
 );
-router.delete("/:id", deleteProject);
-router.delete("/:id/screenshot", deleteProjectScreenshot);
+router.delete("/:id", authMiddleware, deleteProject);
+router.delete("/:id/screenshot", authMiddleware, deleteProjectScreenshot);
 
 module.exports = router;

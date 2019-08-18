@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
+const authMiddleware = require("../middleware/auth");
 const { body } = require("express-validator/check");
 const multer = require("multer");
 const { getUser, postUser, putUser } = require("../controllers/users");
 const User = require("../models/user");
-const authMiddleware = require("../middleware/auth")
 
 router.get("/:id", getUser);
 
