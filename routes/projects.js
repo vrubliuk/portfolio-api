@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const multer = require("multer");
-const uniqid = require('uniqid');
+const uniqid = require("uniqid");
 const authMiddleware = require("../middleware/auth");
 const { postProject, putProject, putProjectScreenshot, deleteProject, deleteProjectScreenshot } = require("../controllers/projects");
 
@@ -18,10 +18,11 @@ router.put(
     },
     storage: multer.diskStorage({
       destination: (req, file, cb) => {
-        const filePath = `uploads/5d27092f6a96d823b45686ab/projects`;
+        const filePath = `uploads/${req.userId}/projects`;
         fs.readdir(filePath, (err, files) => {
           if (err) {
             fs.mkdir(filePath, { recursive: true }, err => {
+              if (err) throw new Error(err);
               cb(null, filePath);
             });
           } else {
