@@ -3,11 +3,14 @@ const helmet = require("helmet");
 const mongoose = require("mongoose");
 const compression = require("compression");
 require("dotenv").config();
+const useLog = require("./middleware/log")
 const useRoutes = require("./routes");
+
 
 const app = express();
 app.use(helmet());
 app.use(compression());
+useLog(app);
 useRoutes(app);
 
 mongoose.set("useCreateIndex", true);
