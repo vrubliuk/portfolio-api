@@ -1,16 +1,18 @@
 const express = require("express");
+const helmet = require("helmet")
 const mongoose = require("mongoose");
 require("dotenv").config();
 const useRoutes = require("./routes");
 
 const app = express();
+ app.use(helmet())
 useRoutes(app);
 
 mongoose.set("useCreateIndex", true);
 mongoose
-  .connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@portfolio-jumvs.mongodb.net/portfolio?retryWrites=true`, { useNewUrlParser: true })
+  .connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@portfolio-jumvs.mongodb.net/${process.env.DB_NAME}?retryWrites=true`, { useNewUrlParser: true })
   .then(() => {
-    app.listen(process.env.PORT);
+    app.listen(process.env.PORT || 3000);
   })
   .catch(error => {
     console.log(error);
