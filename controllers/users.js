@@ -23,15 +23,15 @@ exports.getUser = async (req, res, next) => {
     ]);
     res.json({
       ...data[0]._doc,
-      avatar: data[0]._doc.avatar ? `${process.env.URL}/${data[0]._doc.avatar}` : "",
-      resume: data[0]._doc.resume ? `${process.env.URL}/${data[0]._doc.resume}` : "",
+      avatar: data[0]._doc.avatar ? `${process.env.BASE_SERVER_URL}/${data[0]._doc.avatar}` : "",
+      resume: data[0]._doc.resume ? `${process.env.BASE_SERVER_URL}/${data[0]._doc.resume}` : "",
       skills: data[1],
       experiences: data[2],
       educations: data[3],
       languages: data[4],
       projects: data[5].map(project => ({
         ...project._doc,
-        screenshot: project._doc.screenshot ? `${process.env.URL}/${project._doc.screenshot}` : ""
+        screenshot: project._doc.screenshot ? `${process.env.BASE_SERVER_URL}/${project._doc.screenshot}` : ""
       }))
     });
   } catch (error) {
@@ -131,8 +131,8 @@ exports.putUser = async (req, res, next) => {
     const updatedUser = await user.save();
     res.json({
       ...unselect(updatedUser._doc, "login", "password", "__v"),
-      avatar: user.avatar ? `${process.env.URL}/${user.avatar}` : "",
-      resume: user.resume ? `${process.env.URL}/${user.resume}` : ""
+      avatar: user.avatar ? `${process.env.BASE_SERVER_URL}/${user.avatar}` : "",
+      resume: user.resume ? `${process.env.BASE_SERVER_URL}/${user.resume}` : ""
     });
   } catch (error) {
     next(error);

@@ -60,7 +60,7 @@ exports.putProjectScreenshot = async (req, res, next) => {
     const previousScreenshot = project.screenshot;
     project.screenshot = screenshot.path;
     await project.save();
-    res.json({ screenshot: `${process.env.URL}/${screenshot.path}` });
+    res.json({ screenshot: `${process.env.BASE_SERVER_URL}/${screenshot.path}` });
     if (previousScreenshot) {
       fs.unlink(previousScreenshot, err => {
         if (err) console.log(err);
