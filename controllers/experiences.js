@@ -2,7 +2,7 @@ const Experience = require("../models/experience");
 const unselect = require("../helpers/unselect");
 
 exports.postExperience = async (req, res, next) => {
-  const {userId} = req;
+  const { userId } = req;
   const { position, company, city, startDate, endDate, priority } = req.body;
   const experience = new Experience({
     position,
@@ -30,11 +30,11 @@ exports.postExperience = async (req, res, next) => {
 };
 
 exports.putExperience = async (req, res, next) => {
-  const {userId} = req;
+  const { userId } = req;
   const { id } = req.params;
   const { position, company, city, startDate, endDate, priority } = req.body;
   try {
-    const experience = await Experience.findById(id)
+    const experience = await Experience.findById(id);
     if (experience.userId.toString() !== userId) return res.status(403).json({ message: "Not authorized!" });
     if (position !== undefined) experience.position = position;
     if (company !== undefined) experience.company = company;

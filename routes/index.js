@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("../helpers/path");
-const cors = require("cors")
+const cors = require("cors");
 const auth = require("./auth");
 const users = require("./users");
 const skills = require("./skills");

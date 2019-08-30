@@ -1,6 +1,6 @@
+require("dotenv").config();
 const fs = require("fs");
 const { validationResult } = require("express-validator/check");
-require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const Skill = require("../models/skill");

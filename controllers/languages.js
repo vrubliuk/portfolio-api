@@ -2,7 +2,7 @@ const Language = require("../models/language");
 const unselect = require("../helpers/unselect");
 
 exports.postLanguage = async (req, res, next) => {
-  const {userId} = req;
+  const { userId } = req;
   const { name, level, priority } = req.body;
   const language = new Language({
     name,

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { validationResult } = require("express-validator/check");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -20,7 +21,7 @@ exports.logIn = async (req, res, next) => {
       {
         userId: user._id.toString()
       },
-      "portfolio-api",
+      process.env.JWT_PRIVATE_KEY,
       { expiresIn: "30m" }
     );
     res.json({

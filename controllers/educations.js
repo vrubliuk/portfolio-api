@@ -2,7 +2,7 @@ const Education = require("../models/education");
 const unselect = require("../helpers/unselect");
 
 exports.postEducation = async (req, res, next) => {
-  const {userId} = req;
+  const { userId } = req;
   const { speciality, institution, startDate, endDate, priority } = req.body;
   const education = new Education({
     speciality,
@@ -28,7 +28,7 @@ exports.postEducation = async (req, res, next) => {
 };
 
 exports.putEducation = async (req, res, next) => {
-  const {userId} = req;
+  const { userId } = req;
   const { id } = req.params;
   const { speciality, institution, startDate, endDate, priority } = req.body;
   try {
@@ -47,7 +47,7 @@ exports.putEducation = async (req, res, next) => {
 };
 
 exports.deleteEducation = async (req, res, next) => {
-  const {userId} = req;
+  const { userId } = req;
   const { id } = req.params;
   try {
     const education = await Education.findById(id);

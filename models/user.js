@@ -1,11 +1,10 @@
 const { Schema, model } = require("mongoose");
-// const {ObjectId} = Schema.Types;
 
 const userSchema = new Schema({
   login: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   password: {
     type: String,
@@ -37,7 +36,7 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    default: "",
+    default: ""
   },
   github: {
     type: String,
@@ -47,14 +46,6 @@ const userSchema = new Schema({
     type: String,
     default: ""
   },
-  // skillIds: [ObjectId],
-  // experienceIds: [ObjectId],
-  // educationIds: [ObjectId],
-  // languageIds: [{
-  //   type: ObjectId,
-  //   ref: "Language"
-  // }],
-  // projectIds: [ObjectId],
   resume: {
     type: String,
     default: ""

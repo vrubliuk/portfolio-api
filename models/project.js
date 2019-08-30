@@ -1,5 +1,5 @@
-const {Schema, model} = require("mongoose");
-const {ObjectId} = Schema.Types;
+const { Schema, model } = require("mongoose");
+const { ObjectId } = Schema.Types;
 
 const projectSchema = new Schema({
   name: String,
@@ -19,4 +19,4 @@ const projectSchema = new Schema({
   }
 });
 
-module.exports = model("Project", projectSchema)
+module.exports = model("Project", projectSchema);

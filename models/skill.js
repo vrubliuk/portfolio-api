@@ -1,5 +1,5 @@
-const {Schema, model} = require("mongoose");
-const {ObjectId} = Schema.Types;
+const { Schema, model } = require("mongoose");
+const { ObjectId } = Schema.Types;
 
 const skillSchema = new Schema({
   title: String,
@@ -15,4 +15,4 @@ const skillSchema = new Schema({
   }
 });
 
-module.exports = model("Skill", skillSchema)
+module.exports = model("Skill", skillSchema);

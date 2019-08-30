@@ -1,11 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const helmet = require("helmet");
 const mongoose = require("mongoose");
 const compression = require("compression");
-require("dotenv").config();
-const useLog = require("./middleware/log")
+const useLog = require("./middleware/log");
 const useRoutes = require("./routes");
-
 
 const app = express();
 app.use(helmet());
