@@ -8,6 +8,7 @@ const experiences = require("./experiences");
 const educations = require("./educations");
 const languages = require("./languages");
 const projects = require("./projects");
+const files = require("./files");
 const { getNotFound } = require("../controllers/errors");
 
 module.exports = app => {
@@ -21,6 +22,7 @@ module.exports = app => {
   app.use("/api/educations", educations);
   app.use("/api/languages", languages);
   app.use("/api/projects", projects);
+  app.use("/api/files", files);
   app.use(getNotFound);
   app.use((error, req, res, next) => {
     const status = error.statusCode || 500;

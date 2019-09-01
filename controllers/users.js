@@ -31,7 +31,7 @@ exports.getUser = async (req, res, next) => {
       languages: data[4],
       projects: data[5].map(project => ({
         ...project._doc,
-        screenshot: project._doc.screenshot ? `${process.env.BASE_SERVER_URL}/${project._doc.screenshot}` : ""
+        screenshot: project._doc.screenshot ? `${process.env.BASE_SERVER_URL}/api/files/${project._doc.screenshot}` : ""
       }))
     });
   } catch (error) {

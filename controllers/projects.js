@@ -2,6 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const Project = require("../models/project");
 const unselect = require("../helpers/unselect");
+const { gfs } = require("../helpers/gridFsStream");
 
 exports.postProject = async (req, res, next) => {
   const { userId } = req;
@@ -48,24 +49,34 @@ exports.putProjectScreenshot = async (req, res, next) => {
   const { userId } = req;
   const { id } = req.params;
   const screenshot = req.file;
+  console.log("screenshot", screenshot);
+
   if (!screenshot) return next(new Error("File type is not correct"));
   try {
     const project = await Project.findById(id);
     if (project.userId.toString() !== userId) {
+      
+      // removing
       fs.unlink(screenshot.path, err => {
         if (err) console.log(err);
       });
+      // -----------
+      
       return res.status(403).json({ message: "Not authorized!" });
     }
     const previousScreenshot = project.screenshot;
-    project.screenshot = screenshot.path;
+    project.screenshot = screenshot.id;
     await project.save();
-    res.json({ screenshot: `${process.env.BASE_SERVER_URL}/${screenshot.path}` });
+    res.json({ screenshot: `${process.env.BASE_SERVER_URL}/api/files/${screenshot.id}` });
+    
+     // removing
     if (previousScreenshot) {
       fs.unlink(previousScreenshot, err => {
         if (err) console.log(err);
       });
     }
+      // -----------
+    
   } catch (error) {
     next(error);
   }

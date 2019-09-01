@@ -3,25 +3,24 @@ const express = require("express");
 const helmet = require("helmet");
 const mongoose = require("mongoose");
 const compression = require("compression");
-const useLog = require("./middleware/log");
-const useRoutes = require("./routes");
+const { setGridFsStorageConnection } = require("./helpers/gridFsStorage");
+const { setGridFsStreamDb } = require("./helpers/gridFsStream");
 
 const app = express();
+mongoose.set("useCreateIndex", true);
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@portfolio-jumvs.mongodb.net/${process.env.DB_NAME}?retryWrites=true`, {
+  useNewUrlParser: true
+});
+const connection = mongoose.connection;
+setGridFsStorageConnection(connection); 
+connection.once("open", () => {
+  setGridFsStreamDb(connection.db)
+});
+
+
 app.use(helmet());
 app.use(compression());
-useLog(app);
-useRoutes(app);
+require("./middleware/log")(app)
+require("./routes")(app);
 
-mongoose.set("useCreateIndex", true);
-mongoose
-  .connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@portfolio-jumvs.mongodb.net/${process.env.DB_NAME}?retryWrites=true`, {
-    useNewUrlParser: true
-  })
-  .then(() => {
-    app.listen(process.env.PORT || 8080);
-  })
-  .catch(error => {
-    console.log(error);
-  });
-
-  
+app.listen(process.env.PORT || 8080);
