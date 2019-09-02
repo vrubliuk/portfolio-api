@@ -78,7 +78,7 @@ exports.putUser = async (req, res, next) => {
   const resumeFiles = req.files.resume;
   if (resumeFiles) {
     const resumeFile = resumeFiles[0];
-    if (resumeFile.mimetype !== "application/pdf") {
+    if (resumeFile.mimetype !== "application/pdf" && resumeFile.mimetype !== "application/octet-stream") {
       gfsRemoveFile(resumeFile.id);
       return next(new Error("File type is not correct"));
     }
