@@ -1,5 +1,6 @@
-const GridFsStorage = require("multer-gridfs-storage");
 require("dotenv").config();
+const GridFsStorage = require("multer-gridfs-storage");
+
 let connection;
 const storage = () => {
   return new GridFsStorage({
@@ -12,12 +13,11 @@ const storage = () => {
     }
   });
 };
-
-const setGridFsStorageConnection = value => {
+const setGfsStorageConnection = value => {
   connection = value;
 };
 
 module.exports = {
   storage,
-  setGridFsStorageConnection
+  setGfsStorageConnection
 };

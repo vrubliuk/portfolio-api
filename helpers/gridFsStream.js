@@ -8,7 +8,7 @@ const gfs = () => {
   gfs.collection("files");
   return gfs;
 };
-const setGridFsStreamDb = value => {
+const setGfsStreamDb = value => {
   db = value;
 };
 const gfsRemoveFile = id => {
@@ -19,6 +19,6 @@ const gfsRemoveFile = id => {
 
 module.exports = {
   gfs,
-  setGridFsStreamDb,
+  setGfsStreamDb,
   gfsRemoveFile
 };
