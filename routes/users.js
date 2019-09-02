@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
 const authMiddleware = require("../middleware/auth");
 const { body } = require("express-validator/check");
 const multer = require("multer");
 const { getUser, postUser, putUser } = require("../controllers/users");
 const User = require("../models/user");
+const { storage } = require("../helpers/gridFsStorage");
 
 router.get("/:id", getUser);
 router.post(
@@ -29,23 +29,7 @@ router.put(
   "/:id",
   authMiddleware,
   multer({
-    storage: multer.diskStorage({
-      destination: (req, file, cb) => {
-        const filePath = `uploads/${req.params.id}/${file.fieldname}`;
-        fs.readdir(filePath, (err, files) => {
-          if (err) {
-            fs.mkdir(filePath, { recursive: true }, err => {
-              cb(null, filePath);
-            });
-          } else {
-            cb(null, filePath);
-          }
-        });
-      },
-      filename: (req, file, cb) => {
-        cb(null, file.originalname);
-      }
-    })
+    storage: storage()
   }).fields([{ name: "avatar", maxCount: 1 }, { name: "resume", maxCount: 1 }]),
   putUser
 );

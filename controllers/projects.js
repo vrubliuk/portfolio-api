@@ -2,6 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const Project = require("../models/project");
 const unselect = require("../helpers/unselect");
+const { gfsRemoveFile } = require("../helpers/gridFsStream");
 
 exports.postProject = async (req, res, next) => {
   const { userId } = req;
@@ -52,19 +53,15 @@ exports.putProjectScreenshot = async (req, res, next) => {
   try {
     const project = await Project.findById(id);
     if (project.userId.toString() !== userId) {
-      fs.unlink(screenshot.path, err => {
-        if (err) console.log(err);
-      });
+      gfsRemoveFile(screenshot.id);
       return res.status(403).json({ message: "Not authorized!" });
     }
     const previousScreenshot = project.screenshot;
-    project.screenshot = screenshot.path;
+    project.screenshot = screenshot.id;
     await project.save();
-    res.json({ screenshot: `${process.env.BASE_SERVER_URL}/${screenshot.path}` });
+    res.json({ screenshot: `${process.env.BASE_SERVER_URL}/api/files/${screenshot.id}` });
     if (previousScreenshot) {
-      fs.unlink(previousScreenshot, err => {
-        if (err) console.log(err);
-      });
+      gfsRemoveFile(previousScreenshot);
     }
   } catch (error) {
     next(error);
@@ -96,12 +93,10 @@ exports.deleteProjectScreenshot = async (req, res, next) => {
     const project = await Project.findById(id);
     if (project.userId.toString() !== userId) return res.status(403).json({ message: "Not authorized!" });
     const previousScreenshot = project.screenshot;
-    project.screenshot = "";
+    project.screenshot = null;
     await project.save();
     res.sendStatus(200);
-    fs.unlink(previousScreenshot, err => {
-      if (err) console.log(err);
-    });
+    gfsRemoveFile(previousScreenshot);
   } catch (err) {
     next(err);
   }

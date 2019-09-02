@@ -22,7 +22,7 @@ exports.logIn = async (req, res, next) => {
         userId: user._id.toString()
       },
       process.env.JWT_PRIVATE_KEY,
-      { expiresIn: "30m" }
+      { expiresIn: "1h" }
     );
     res.json({
       token

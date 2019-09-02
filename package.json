@@ -8,8 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "start:dev": "nodemon app.js"
+    "start": "nodemon app.js"
   },
   "author": "Valentyn Rubliuk",
   "license": "ISC",
@@ -20,11 +19,13 @@
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "express-validator": "^5.3.1",
+    "gridfs-stream": "^1.1.1",
     "helmet": "^3.20.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.4",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
+    "multer-gridfs-storage": "^3.3.0",
     "uniqid": "^5.0.3"
   },
   "devDependencies": {
