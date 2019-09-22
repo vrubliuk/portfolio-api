@@ -33,5 +33,5 @@ exports.logIn = async (req, res, next) => {
 };
 
 exports.session = (req, res) => {
-  res.statusCode(200);
+  res.sendStatus(200);
 };
